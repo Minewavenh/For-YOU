@@ -1,0 +1,228 @@
+```html id="z9k3xp"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: black;
+  color: white;
+  overflow: hidden;
+  text-align: center;
+}
+
+.hidden { display: none; }
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+h1 { font-size: 32px; }
+
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.yes { background: #ff4d6d; }
+.no { background: #333; position: absolute; }
+
+.chat {
+  width: 90%;
+  max-width: 300px;
+  margin: auto;
+  text-align: left;
+}
+
+.msg {
+  background: #222;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.me { background: #ff4d6d; text-align: right; }
+
+.heart, .confetti {
+  position: absolute;
+}
+
+.heart {
+  color: red;
+  animation: floatUp 5s linear infinite;
+}
+
+.confetti {
+  width: 10px;
+  height: 10px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-10vh); }
+}
+
+@keyframes fall {
+  0% { transform: translateY(-10vh); }
+  100% { transform: translateY(100vh); }
+}
+
+.music {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="center">
+  <h1 id="type"></h1>
+</div>
+
+<!-- CHAT STORY -->
+<div id="chatBox" class="hidden center">
+  <div class="chat" id="chat"></div>
+</div>
+
+<!-- MAIN -->
+<div id="main" class="hidden center">
+  <h1 id="finalMsg"></h1>
+  <button class="yes" onclick="yesClicked()">Yes ❤️</button>
+  <button class="no" id="noBtn" onmouseover="moveNo()">No 😢</button>
+</div>
+
+<button class="music" onclick="toggleMusic()">🎵</button>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+// GET NAME FROM URL
+const params = new URLSearchParams(window.location.search);
+let name = params.get("name") || "You";
+
+// TYPEWRITER INTRO
+let text = "Hey " + name + "... I made something for you 💖";
+let i = 0;
+
+function typeEffect() {
+  if (i < text.length) {
+    document.getElementById("type").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeEffect, 50);
+  } else {
+    setTimeout(showChat, 1000);
+  }
+}
+
+typeEffect();
+
+// CHAT STORY
+let messages = [
+  "Hey...",
+  "I was thinking about you 🙂",
+  "And I wanted to ask something...",
+  "Something important 💭",
+  "So here it is..."
+];
+
+let index = 0;
+
+function showChat() {
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("chatBox").classList.remove("hidden");
+
+  let interval = setInterval(() => {
+    if (index >= messages.length) {
+      clearInterval(interval);
+      setTimeout(showMain, 1000);
+      return;
+    }
+
+    let div = document.createElement("div");
+    div.className = "msg";
+    div.innerText = messages[index];
+
+    document.getElementById("chat").appendChild(div);
+    index++;
+  }, 1000);
+}
+
+// MAIN SCREEN
+function showMain() {
+  document.getElementById("chatBox").classList.add("hidden");
+  document.getElementById("main").classList.remove("hidden");
+
+  document.getElementById("finalMsg").innerText =
+    "Will you be mine, " + name + "? 💖";
+}
+
+// NO BUTTON ESCAPE
+function moveNo() {
+  const btn = document.getElementById("noBtn");
+
+  let x = Math.random() * (window.innerWidth - 100);
+  let y = Math.random() * (window.innerHeight - 50);
+
+  btn.style.left = x + "px";
+  btn.style.top = y + "px";
+}
+
+// YES CLICK
+function yesClicked() {
+  document.getElementById("finalMsg").innerText =
+    "I KNEW IT 😭💖 BEST DAY EVER!!!";
+
+  hearts();
+  confetti();
+}
+
+// EFFECTS
+function hearts() {
+  setInterval(() => {
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  },200);
+}
+
+function confetti() {
+  setInterval(() => {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*100+"vw";
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  },100);
+}
+
+// MUSIC
+function toggleMusic() {
+  let m = document.getElementById("music");
+  m.paused ? m.play() : m.pause();
+}
+</script>
+
+</body>
+</html>
+```
